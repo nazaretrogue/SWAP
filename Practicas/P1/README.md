@@ -73,3 +73,65 @@ mediante un ping (de M1 a M2 y de M2 a M1 respectivamente).
 
 ![ping M1 a M2](9.png)
 ![ping M2 a M1](10.png)
+
+## Pila LAMP: funcionamiento
+
+A partir de aquí, mostraré todo lo que haga solo en la M1, de forma análoga a como
+lo haría en la M2. Pero para simplificar el documento y facilitar un poco las cosas,
+solo utilizaré capturas de M1.
+
+Durante la instalación hemos instalado una pila LAMP, de la cual vamos a comprobar
+si el servidor de apache (A) y el intérprete php (P) están en funcionamiento. El
+gestor MySQL (M) no será mostrado aquí porque no tomé captura durante la instalación,
+no obstante, se pedía una contraseña para el administrador del gestor.
+
+Para comprobar si apache está instalado, y en qué estado está (inactivo, corriendo...)
+podemos usar el comando apache2 -v, o bien, systemctl status apache, ambos métodos
+mostrados en la imagen siguiente. Está claro que apache está, en efecto, instalado
+y en funcionamiento.
+
+![Estado de apache2](11.png)
+
+Para comprobar que php se ha instalado correctamente solo tenemos que entrar
+en el modo interactivo del intérprete (opción -a).
+
+![Estado de php](12.png)
+
+## Servicio SSH: funcionamiento
+
+Ahora comprobaré el estado de SSH, intentando conectarme a la máquina M2 a través
+de M1. Para ello, accedemos mediante el comando:
+
++ ssh 192.168.56.106 -l nazaretrogue
+
+Este comando nos permite acceder mediante ssh a la dirección IP dada con el usuario
+dado con la opción -l.
+
+Lo primero que ocurre es que ssh pide crear una clave simétrica para poder conectarse.
+Una vez creada esta clave, la conexión es segura y se puede comenzar a establecer
+la conexión.
+
+![Clave SSH](13.png)
+
+Tras esto, pide la contraseña del usuario con la que he entrado, es decir, el
+login dado con la opción anteriormente mencionada.
+
+![Contraseña del user](14.png)
+
+Una vez introducida, entramos a la máquina de la cual hemos dado la IP en el
+comando. Podemos comprobar que estamos en dicha máquina porque el prompt, en el
+que antes ponía ub1 (en la M1), ahora ha cambiado a ub2 (en la M2). Además, compruebo
+también la IP mediante ifconfig, para demostrar que en efecto, estamos en la máquina
+con IP 10.0.2.15, es decir, M2.
+
+![Prompt ub2](15.png)
+![ifconfig con SSH](16.png)
+
+## Servidor en funcionamiento desde el host
+
+Por último, creo un archivo, "hola.html" en /var/www/html de la M1 y accedo a él
+a través de la IP (desde el anfitrión, de forma que M1 actúa como servidor web).
+El archivo y el resultado del acceso están reflejados en las imágenes que siguen:
+
+![Archivo /var/www/html/hola.html](17.png)
+![Acceso al servidor M1](18.png)
