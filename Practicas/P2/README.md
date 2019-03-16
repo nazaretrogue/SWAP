@@ -19,7 +19,7 @@ tipo rsa.
 Tras generar la clave, hay que copiarla desde la máquina M2 a la máquina M1 con
 el comando que sigue, donde la IP dada es la IP de la máquina destino, es decir M1:
 
-```sh
++ ```sh
 ssh-copy-id 192.168.56.105
 ```
 
@@ -30,3 +30,22 @@ funciona y no es necesario introducir la contraseña.
 ![Copia de la clave en M1](2.png)
 
 ## Prueba del funcionamiento de rsync
+
+Antes de automatizar el proceso de sincronización mediante el demonio cron,
+probaré el funcionamiento de rsync de forma aislada.
+
+Para que rsync funcione sobre el directorio /var/www/, es necesario ser propietario
+de dicho directorio, ya que no es seguro acceder a través del usuario root del
+sistema, que en este momento es el que tiene los permisos sobre dicho directorio.
+Para cambiar el propietario se utiliza chown.
+
+Tras esto, pruebo el comando de rsync tal y como se muestra en la imagen. Para ello,
+creo un archivo, "algo.html" y también el archivo "hola.html", dentro del directorio
+/var/www/html/. De esta forma sabré si el comando funciona tanto con ficheros que
+se creen en el propio /var/www/ como en directorios que haya dentro de éste. Los
+archivos son transmitidos correctamente, como se muestra en la salida por pantalla
+del comando.
+
+![Funcionamiento de rsync](3.png)
+
+## Automatización de la sincronización mediante el demonio cron
