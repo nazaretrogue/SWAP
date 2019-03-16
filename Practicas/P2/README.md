@@ -62,6 +62,6 @@ Por último, para asegurarme de que el comando está funcionando de forma correc
 y que no se genera ningún error, miro en el archivo /var/log/syslog del sistema,
 que da lugar a la siguiente salida:
 
-![Archivo /var/log/syslog de M2](1.png)
+![Archivo /var/log/syslog de M2](5.png)
 
 Por lo que está todo correcto ya que no se presenta ningún error.
