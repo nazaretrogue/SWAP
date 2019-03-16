@@ -8,8 +8,9 @@ la otra máquina nos reconozca sin necesidad de pedir la contraseña de la máqu
 a la que se está accediendo.
 
 Para ello, genero una clave en la máquina M2 mediante el comando que sigue:
-
-+ ssh-keygen -b 4096 -t rsa
+```sh
+ssh-keygen -b 4096 -t rsa
+```
 
 Este comando significa que se genera una clave SSH con un tamaño de 4096 bits y de
 tipo rsa.
