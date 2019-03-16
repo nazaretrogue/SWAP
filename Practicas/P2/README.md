@@ -19,7 +19,7 @@ tipo rsa.
 Tras generar la clave, hay que copiarla desde la máquina M2 a la máquina M1 con
 el comando que sigue, donde la IP dada es la IP de la máquina destino, es decir M1:
 
-+ ```sh
+```sh
 ssh-copy-id 192.168.56.105
 ```
 
@@ -49,3 +49,18 @@ del comando.
 ![Funcionamiento de rsync](3.png)
 
 ## Automatización de la sincronización mediante el demonio cron
+
+Para automatizar, lo único que tengo que hacer es añadir una línea con el comando
+que quiero que se ejecute periódicamente en el archivo /etc/crontab, con la
+frecuencia que deseo. En este caso, y para comprobar el funcionamiento, la
+periodicidad es de un minuto. El archivo queda como sigue:
+
+![Archivo /etc/crontab de M2](4.png)
+
+Por último, para asegurarme de que el comando está funcionando de forma correcta
+y que no se genera ningún error, miro en el archivo /var/log/syslog del sistema,
+que da lugar a la siguiente salida:
+
+![Archivo /var/log/syslog de M2](1.png)
+
+Por lo que está todo correcto ya que no se presenta ningún error.
