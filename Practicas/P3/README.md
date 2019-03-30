@@ -111,12 +111,13 @@ Y como es evidente, funciona.
 En este apartado, utilizaré **_ab_** (**_apache benchmark_**) para sobrecargar
 el servidor balanceado.
 
-### Nginx como servidor balanceado
+### Nginx como servidor balanceado con round-robin
 
 Para testar como reacciona *nginx* ante una gran carga, llevaré a cabo dos
 experimentos. Para comprobar el estado de cada máquina, usaré *htop*, un monitor
 del sistema por línea de comandos pero que ofrece una interfaz con colores, donde
-muestra la carga de la CPU, la memoria y el area de intercambio principalmente.
+muestra la carga de la CPU, la memoria y el area de intercambio principalmente. En
+este primer caso, lo haré con el algoritmo de balanceo de __round-robin__.
 
 Mediante el comando
 
@@ -135,10 +136,28 @@ Como se puede comprobar, la CPU del balanceador está casi al 100%, mientras que
 en las máquinas M1 y M2, la carga está repartida equitativamente, por lo que el
 uso de la CPU es similar entre ambas máquinas.
 
-### Haproxy como servidor balanceado
+### Nginx como servidor balanceado con ponderación
+
+En este segundo caso, probaré el comportamiento de *nginx* cuando se le da más
+peso a la M1 que a M2 (pesos 2 y 1 respectivamente, es decir, M1 recibirá el
+doble de carga porque la creemos el doble de potente).
+
+![Configuración con pesos](img/18.png)
+
+Las imágenes que muestran el funcionamiento son las que sigue (M3, M1 y M2):
+
+![M3 htop](img/19.png)
+![M1 htop](img/20.png)
+![M2 htop](img/21.png)
+
+Con este algoritmo, el balanceador sigue estando al 100% de uso de CPU, pero
+el uso de CPU en las máquinas varía: M1 tiene el doble de carga que M2 (que tiene
+un 20% de carga de CPU solamente).
+
+### Haproxy como servidor balanceado con round-robin
 
 Al igual que acabo de hacer con *nginx*, lo haré con *haproxy*; utilizaré las
-mismas herramientas, tanto **_ab_** como *htop*.
+mismas herramientas, tanto **_ab_** como *htop*. El algoritmo usado es __round-robin__.
 
 De nuevo, con el mismo comando que previamente he mencionado, lanzaré 100000
 peticiones al balanceador, con una concurrencia de 10 (es decir, de 10 en 10).
@@ -151,3 +170,20 @@ El resultado de cada máquina (M3, M1 y M2, en este orden) es:
 Al igual que antes, el balanceador tiene la CPU al 100%, mientras que las máquinas
 servidoras tienen las peticines repartidas, de forma que ambas tiene la CPU
 más o menos a la mitad de su capacidad.
+
+### Haproxy como servidor balanceado con ponderación
+
+Ahora testaré *haproxy* con **_ab_**, mostrando los resultados mediante *htop* y
+ponderando los pesos de las máquinas, dando el doble de carga a M1 que a M2. En
+la imagen se muestra dicha configuración.
+
+![Configuración con pesos](img/22.png)
+
+En las imágenes se muestra el uso de CPU de M3, M1 y M2, correspondientemente:
+
+![M3 htop](img/23.png)
+![M1 htop](img/24.png)
+![M2 htop](img/25.png)
+
+Como se puede observar, el reparto de carga es el doble en la M1 que en M2, pero
+esto no afecta al balanceador, que sigue teniendo el uso de su CPU al 100%.
