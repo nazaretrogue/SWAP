@@ -152,7 +152,7 @@ Las imágenes que muestran el funcionamiento son las que sigue (M3, M1 y M2):
 
 Con este algoritmo, el balanceador sigue estando al 100% de uso de CPU, pero
 el uso de CPU en las máquinas varía: M1 tiene el doble de carga que M2 (que tiene
-un 20% de carga de CPU solamente).
+un 24% de carga de CPU solamente).
 
 ### Haproxy como servidor balanceado con round-robin
 
@@ -187,3 +187,37 @@ En las imágenes se muestra el uso de CPU de M3, M1 y M2, correspondientemente:
 
 Como se puede observar, el reparto de carga es el doble en la M1 que en M2, pero
 esto no afecta al balanceador, que sigue teniendo el uso de su CPU al 100%.
+
+## Someter a alta carga al servidor balanceado con **_jMeter_**
+
+En este caso, y como trabajo opcional para la práctica, utilizaré el benchmark
+**_jMeter_** . He intentado utilizar *seesaw* y *gobetween*, pero he tenido muchos
+problemas, de instalación en el primer caso y de ejecución en el segundo. Por
+tanto, al final me he decidido a usar **_jMeter_**, ya que conozco su funcionamiento
+gracias a la asignatura Ingeniería de Servidores. En el repositorio está incluido
+el test de jMeter que he utilizado para generar la carga.
+
+### Nginx como servidor balanceado
+
+Utilizando un test que he creado para **_jMeter_**, y con el algoritmo de __round-robin__,
+los resultados dados son los que siguen, para las máquinas M3, M1 y M2, usando *nginx*:
+
+![M3 htop](img/26.png)
+![M1 htop](img/27.png)
+![M2 htop](img/28.png)
+
+Como no ha cambiado el funcionamiento del balanceador ni de los servidores, los
+resultados son similares con los demás tests usando *nginx*.
+
+### Haproxy como servidor balanceado
+
+Para este último caso, utilizaré *haproxy* con el algoritmo de __round-robin__ y
+el test de **_jMeter_**. Los resultados de M3, M1 y M3 son estos:
+
+![M3 htop](img/29.png)
+![M1 htop](img/30.png)
+![M2 htop](img/31.png)
+
+Al igual que en todos los casos anteriores, los resultados son los esperados,
+con el balanceador al 100% de su capacidad y las máquinas utilizadas como servidoras
+a la mitad de uso de CPU aproximadamente.
