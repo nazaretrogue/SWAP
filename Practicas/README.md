@@ -8,6 +8,9 @@ funcionamiento de las máquinas.
 ## Práctica 2: Clonar la información de un sitio web
 
 En esta segunda práctica se utiliza la herramienta rsync para mantener las
-máquinas con copias exactas de la información mantenida en el directorio /var/www/.
+máquinas con copias exactas de la información mantenida en el directorio /var/www/.  
 
+## Práctica 3: Balanceo de carga
 
+Se balanceará la carga utilizando nginx y haproxy, y generando la carga para los
+servidores con ab y jMeter.
