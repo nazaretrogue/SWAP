@@ -14,3 +14,8 @@ máquinas con copias exactas de la información mantenida en el directorio /var/
 
 Se balanceará la carga utilizando nginx y haproxy, y generando la carga para los
 servidores con ab y jMeter.
+
+## Práctica 4: Asegurar la granja Web
+
+La granja ofrecerá sus servicios tanto en HTTP como en HTTPS; además, se configurará
+iptables para que la granja pueda defenderse en el caso de que sufra ataques.
