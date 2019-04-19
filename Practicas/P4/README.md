@@ -79,3 +79,49 @@ está configurado mediante ponderación, con la M1 supuesta el doble de potente 
 motivo por el cual el reparto no es equitativo.
 
 ![curl M3](img/11.png)
+
+## Configuración del cortafuegos
+
+Después de configurar las máquinas para que acepten tráfico desde el puerto 443,
+ahora hay que configurar el cortafuegos para filtrar el tráfico que pasa por la
+granja web. Será configurado con _iptables_.
+
+Para ello, después de hacer las pruebas para aprender a usarlo, creo un script
+que será ejecutado al arrancar la máquina, de manera que, al iniciarla, se configure
+automáticamente el cortafuegos.
+
+Lo primero que haré será crear y activar un demonio que ejecutará el script al
+arrancar. Dicho demonio estará en /etc/systemc/system/ con el nombre de
+**iptables-config-init.service**.
+
+![Demonio](img/12.png)
+
+Una vez configurado, creo el script que ha de ejecutarse y cuya ruta absoluta
+es la que le he dado en ExecStart. Es decir, el script estará en /usr/local/bin/
+y su nombre será **iptables-script-init.sh**.
+
+![Script](img/13.png)
+
+Una vez están listos ambos archivos, activo y lanzo el demonio con los comandos
+
+```sh
+systemctl daemon-reload
+systemctl enable iptables-config-init.service
+```
+
+![Ejecución demonio](img/14.png)
+
+Una vez está el demonio activo, solo hay que reiniciar la máquina para comprobar
+que está llevando a cabo la configuración. Tras reiniciar, se comprueban los puertos
+que están escuchando y la configuración del cortafuegos.
+
+Primero vemos que los puertos están correctos:
+
+![netstat -tulpn](img/15.png)
+
+Ahora vemos que el cortafuegos está bien configurado:
+
+![iptables -L -n -v](img/16.png)
+
+Como se ha demostrado, todo funciona correctamente y las máquinas son capaces de
+recibir y de enviar tráfico de forma segura en la granja.
