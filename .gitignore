@@ -242,5 +242,6 @@ TSWLatexianTemp*
 *.spl
 
 # Directorios y archivos propios que no quiero que sean subidos
-Teoría/
+Teoria/Tema*
+Teoria/Swap*
 practica_*.pdf
