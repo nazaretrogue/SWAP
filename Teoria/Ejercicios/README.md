@@ -38,20 +38,78 @@ Cortafuegos | 0.9775 | 0.85 | 0.99662
 Switch | 0.9999 | 0.99 | 1
 Data Center | 0.9999 | 0.9999 | 1
 ISP | 0.9975 | 0.95 | 0.99987
- | | Total | 0.99214
+\- | - | Total | 0.99214
 
 ## Ejercicio 2
 Buscar frameworks y librerías para diferentes lenguajes que permitan hacer aplicaciones
 altamente disponibles con relativa facilidad.
 
++ **PM2**: es un administrador de tareas que permite mantener, creado sobre un
+    balanceador de carga que permite mantener activas las aplicaciones con una
+    altísima disponibilidad y que facilita el trabajo de los administradores de
+    sistemas.
++ **Vaadin**: es una plataforma para aplicaciones web que incluye un conjunto de
+    componentes, entre los que está un framework de Java para web, que ayuda al
+    mantenimiento de la disponibilidad de las aplicaciones hospedadas en la
+    plataforma. Es sencillo de usar y está pensado especialmente para principiantes.
++ **Sprint MVC**: es una buena alternativa a *Vaadin*; altamente escalable, permite
+    una disponibilidad de los servicios alta y tiene una gran cantidad de documentación.
+    Pero, a diferencia de *Vaadin*, mantener el código con este framework es bastante
+    más complejo y puede ser difícil para alguien recién iniciado.
+
 ## Ejercicio 3
 ¿Cómo analizar el nivel de carga de cada uno de los subsistemas en el servidor? Buscar
 herramientas y aprender a usarlas.
+
+Para poder medir el nivel de carga de cada subsistema en un servidor, se utilizan
+los llamados *profilers*, monitores que se centran en analizar el nivel de carga
+de los distintos componentes. También existen los monitores que analizan el tráfico
+del sistema al completo (como el monitor *sar*, que se basa en dos órdenes
+complementarias, *sadc*, que recopila datos, y *sar*, que traduce dichos datos a
+un formato legible y entendible.) Entre los *profilers*, destacan:
+
++ **gprof**: un monitor fácil de utilizar, que da el uso de CPU de un programa.
+    Para utilizarlo, es necesario instrumentar el programa en la compilación
+    para poder recoger datos, y tras conseguirlos, analizarlos.
++ **Perf**: esta herramienta ofrece la posibilidad de analizar muchos más componentes
+    según las necesidades del servidor. Está basado en eventos hardware y software
+    y posee una gran cantidad de comandos según lo que se vaya a analizar.
++ **V-Tune**: al igual que *Perf*, está basado en eventos y soporta tanto eventos
+    hardware como software. También se puede utilizar como depurador y es capaz
+    de medir el rendimiento de cada componente que se analice.
 
 ## Ejercicio 4
 Buscar ejemplos de balanceadores software y hardware (productos comerciales). Buscar
 productos comerciales para servidores de aplicaciones. Buscar productos comerciales
 para servidores de almacenamiento.
+
+### Hardware
+
++ **F5 Networks Big/IP**: uno de los productos más conocidos para balanceo de
+    carga con hardware. Este dispositivo está contenido en un rack, listo para
+    ser montado en un armario, y posee software específico de forma que realiza
+    la carga de forma eficiente.
++ **Cisco Load Balancer**: la metodología de Cisco consiste en crear routers que
+    directamente actúan como balanceadores, de forma que no tiene que disponer de
+    hardware distinto al que acostumbran. De esta forma, crean balanceadores de
+    carga hardware con una tecnología que dominan y dan lugar a dispositivos
+    pequeños y manejables pero potentes y eficientes.
++ **Kemp Technologies**: han creado un balanceador de carga al alcance de todos
+    (barato en comparación con los existentes) pero que tiene una potencia similar
+    o mínimamente inferior, aunque los consumidores de estos aún creen que necesitan
+    algo más de experiencia en el mercado para crear balanceadores capaces de
+    soportar una mayor funcionalidad.
+
+### Software
+
++ **Seesaw**: usado por Google, ha demostrado ser un software de balanceo eficiente
+    para redes en la capa de transporte. En el caso de tener redes que se quieran
+    balancear en capa 7, quizá ésta no sea la mejor opción.
++ **LoadMaster**: balanceador de carga por software creado por *Kemp*; es gratuito
+    y con gran funcionalidad. Soporta balanceo en capa 4 y capa 7, incluye un
+    cortafuegos para aplicaciones web, persistencia de cookies, tunneling, etc.
++ **HAProxy**: uno de los más populares, da lugar a alta disponibilidad, proxy,
+    y el propio balanceo de carga. Lo utilizan grandes sitios como GitHub o Reddit.
 
 # Tema 3
 
@@ -66,8 +124,10 @@ y bajo Linux el filtrado y bloqueo de paquetes.
 # Tema 4
 
 ## Ejercicio 1
-Buscar informaión sobre cuánto costaría en la actualidad un mainframe que tuviera las mismas prestaciones que una granja web con balanceo de carga y 10 servidores finales. Comparar precio
-y potencia entre esa hipotética máquina y la granja web de una prestaciones similares.
+Buscar informaión sobre cuánto costaría en la actualidad un mainframe que tuviera
+las mismas prestaciones que una granja web con balanceo de carga y 10 servidores finales.
+Comparar precioy potencia entre esa hipotética máquina y la granja web de una
+prestaciones similares.
 
 ## Ejercicio 2
 Buscar información sobre precio y características de balanceadores comerciales (hardware)
