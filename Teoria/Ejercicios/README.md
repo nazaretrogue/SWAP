@@ -124,13 +124,13 @@ Para Windows existe un comando para añadir rutas estáticas en la tabla de enru
 para poder pasar el tráfico de una red a otra a través de una default gateway;
 este comando es
 
-``sh
+```sh
 route ADD [destino] MASK [mascara] [gateway] [metrica]
 ```
 
 Uno muy similar existe en Linux, con una sintaxis similar. Es el siguiente:
 
-``sh
+```sh
 route add -net [destino] netmask [mascara] gw [gateway]
 ```
 
