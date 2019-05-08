@@ -38,7 +38,7 @@ Cortafuegos | 0.9775 | 0.85 | 0.99662
 Switch | 0.9999 | 0.99 | 1
 Data Center | 0.9999 | 0.9999 | 1
 ISP | 0.9975 | 0.95 | 0.99987
-\- | - | Total | 0.99214
+\- | - | **Total** | 0.99214
 
 ## Ejercicio 2
 Buscar frameworks y librerías para diferentes lenguajes que permitan hacer aplicaciones
@@ -77,6 +77,9 @@ un formato legible y entendible.) Entre los *profilers*, destacan:
 + **V-Tune**: al igual que *Perf*, está basado en eventos y soporta tanto eventos
     hardware como software. También se puede utilizar como depurador y es capaz
     de medir el rendimiento de cada componente que se analice.
+
+Estos son solo tres de las decenas de herramientas que existen para monitorizar
+todo tipo de tráfico tanto en el sistema en conjunto, como por componentes, etc.
 
 ## Ejercicio 4
 Buscar ejemplos de balanceadores software y hardware (productos comerciales). Buscar
@@ -117,17 +120,41 @@ para servidores de almacenamiento.
 Buscar con qué órdenes de terminal o herramientas podemos configurar bajo Windows y bajo
 Linux el enrutamiento del tráfico de un servidor para pasar el tráfico desde una subred a otra.
 
+Para Windows existe un comando para añadir rutas estáticas en la tabla de enrutamiento
+para poder pasar el tráfico de una red a otra a través de una default gateway;
+este comando es
+
+``sh
+route ADD [destino] MASK [mascara] [gateway] [metrica]
+```
+
+Uno muy similar existe en Linux, con una sintaxis similar. Es el siguiente:
+
+``sh
+route add -net [destino] netmask [mascara] gw [gateway]
+```
+
+Con estos comandos se añaden rutas estáticas que permiten redirigir el tráfico
+de una subred a otra estableciendo una gateway por defecto por la que saldrá el
+tráfico.
+
 ## Ejercicio 2
 Buscar con qué órdenes de terminal o herramientas gráficas podemos configurar bajo Windows
 y bajo Linux el filtrado y bloqueo de paquetes.
 
-# Tema 4
+Para Windows existe un framework muy potente para el filtrado de paquetes que
+ayuda a filtrarlos de forma transparente para el usuario. Éste es el **Windows Packet
+Filter** (**WinpkFilter**). Está disponible para sistemas a partir de Windows 95
+en adelante.
 
-## Ejercicio 1
-Buscar informaión sobre cuánto costaría en la actualidad un mainframe que tuviera
-las mismas prestaciones que una granja web con balanceo de carga y 10 servidores finales.
-Comparar precioy potencia entre esa hipotética máquina y la granja web de una
-prestaciones similares.
+Para Linux se utiliza el comando *iptables*, con sus muchas opciones para poder
+configurar el firewall del kernel y filtrar los paquetes. Con esta herramienta
+se puede configurar los puertos que están abiertos y cerrados, qué IPs tienen
+el paso abierto y cuáles no, se puede llevar a cabo redirección a través
+de esta herramienta... Es un comando muy potente y capaz de hacer maravillas con
+el firewall.
+
+# Tema 4
 
 ## Ejercicio 2
 Buscar información sobre precio y características de balanceadores comerciales (hardware)
@@ -164,10 +191,92 @@ Aplicar con iptables una política de denegar todo el tráfico en una de las má
 prácticas. Comprobar el funcionamiento. Aplicar con iptables una política de permitir todo
 el tráfico en una de las máquinas de práticias. Comprobar el funcionamiento.
 
+En el caso de que todo el tráfico sea denegado, *iptables* mostraría algo como
+la imagen siguiente:
+
+![Denegación](./img/drop.png)
+
+En este caso, ninguno de los paquetes que tratásemos de enviar, los que llegaran a
+nosotros siendo nosotros el destino o los que llegase a nosotros para reenrutar hacia
+otro nodo de la red podría llegar. Todo el tráfico está cortado de forma que no
+hay conectividad de ningún tipo con el exterior. Todos los puertos están cerrados
+y nada puede entrar ni tampoco salir.
+
+En el segundo caso, en el que todo se acepta, *iptables* quedaría como sigue:
+
+![Aceptación](./img/accept.png)
+
+Ahora todos los paquetes que enviásemos y recibiésemos (siendo nosotros el destino
+o simplemente para reenrutar), llegarían correctamente. Todo el tráfico es aceptado,
+todos los puertos están abiertos y tenemos conexión con el exterior. No obstante,
+estamos totalmente expuestos a que cualquiera pueda entrar a través de uno de nuestros
+puertos y llegue a nuestro dispositivo, posibilitando los ataques. Con esta
+configuración somos vulnerables.
+
 ## Ejercicio 2
 Comprobar qué puertos tienen abiertos nuestras máquinas, su estado y qué programa o demonio
 lo ocupa.
 
+Para saber los puertos usados, su estado y quién es el que lo está usando utilizamos
+la herramienta *netstat* con algunas opciones:
+
++ **-p**: muestra el programa que lo usa.
++ **-u**: muestra los puertos con el protocolo UDP.
++ **-t**: muestra los puertos con el protocolo TCP.
++ **-o**: muestra los temporizadores.
++ **-n**: muestra en formato numérico.
++ **-a**: muestra todos los puertos abiertos.
+
+![Puertos](./img/netstat.png)
+
+Como podemos comprobar, bastantes puertos abiertos. Entre ellos destaca el que usa HTTPS:
+
++ El puerto 443, escuchando, utilizado por Chrome, que sirve para peticiones web
+  que utilizan el protocolo HTTPS y por tanto se encapsulan en TCP/IPv4.
+
 ## Ejercicio 3
 Buscar información acerca de los tipos de ataques más comunes en servidores web. Detallar en
 qué consisten y cómo se pueden evitar.
+
+Entre los ataques más comunes están los tres siguientes:
+
++ **DoS** y **DDoS**. Denegación de servicio y denegación de servicio distribuido
+    respectivamente. Se trata de dos cyberataques donde el autor o autores provocan
+    que los servicios no estén disponible durante un tiempo (indefinido o no) ya
+    que saturan los servidores con peticiones sin acabar, que mantienen a los
+    servidores con peticiones inacabadas de forma que se reservan recursos pero
+    no se llegan a liberar puesto que las peticiones no han finalizado. Una forma
+    de defenderse antes estos ataques es mediante la combinación de clasificación
+    del tráfico, filtrado de paquetes y herramientas de respuesta ante ataques.
+    Por ejemplo, se pueden situar aplicaciones en hardware específico que analicen
+    los paquetes en el front-end antes de enviar los paquetes hacia el back-end
+    para empezar a tramitar la petición. También se puede utilizar los llamados
+    *blackholing* y *sinkholing*. Con un *blackholing* el tráfico se envía a un
+    "agujero negro"; la IP atacante (o IPs) son enviadas a una interfaz nula o
+    inexistente de forma que no ataca realmente los servidores que sirven peticiones.
+    Con un *sinkholing* se rechaza por DNS el tráfico con paquetes corruptos,
+    aunque este método no es de los más efectivos contra ataques a gran escala.
++ **MITM**. El llamado *Man-In-The-Middle*, donde una persona externa a una
+    comunicación se sitúa entre ambos extremos de forma que todo el tráfico pasa
+    por sus manos, de manera que puede cambiar y/o reenviar la información que
+    desee sin que las víctimas sean conscientes del ataque. Para evitar y
+    defenderse de ataques como este, se toman dos medidas: autenticación y detección
+    de manipulación (mediante la integridad de los datos). Autenticándonos de
+    forma segura nos cercioramos de que de verdad nos estamos comunicando con
+    quien deseamos y que los mensajes van protegidos ya que solo la persona a la
+    que le enviamos la información tiene capacidad de descifrar la información.
+    Con la integridad de los datos podemos darnos cuenta de que nuestra infomación
+    ha sido corrompida, es decir, manipulada por un tercero sin nuestro consentimiento.
++ **Phishing** y **spear phising**. Los ataques de suplantación de identidad.
+    Estos ataques se basan en el envío masivo de emails aparentemente fiables y
+    de fuentes reales con la finalidad de obtener datos personales que sirvan y
+    beneficien al atacante de alguna forma. El *spear phising* genera los emails
+    personales, teniendo en cuenta las preferencias del usuario, de forma que de
+    verdad parece que el correo ha sido creado por una fuente de confianza que
+    pide ciertos datos confidenciales y hace más creíble el engaño. Para evitar
+    estos ataques hay webs que ofrecen información sobre los mensajes que han
+    estado circulando recientemente y que han resultado ser fraudulentos, como
+    la web [FraudWatch International](https://fraudwatchinternational.com/), una
+    web australiana que ofrece esta información. Otra táctica es entrenar a los
+    usuarios y advertirlos para que reconozcan a tiempo estos fraudes y no caigan
+    en la trampa, ésta última siendo la estrategia más efectiva contra el *phising*.
