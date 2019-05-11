@@ -19,3 +19,8 @@ servidores con ab y jMeter.
 
 La granja ofrecerá sus servicios tanto en HTTP como en HTTPS; además, se configurará
 iptables para que la granja pueda defenderse en el caso de que sufra ataques.
+
+## Práctica 5: Replicación de bases de datos MySQL
+
+Se construirá una réplica maestro-esclavo para lleva a cabo la clonación de la 
+información de la máquina principal a la de backup.
