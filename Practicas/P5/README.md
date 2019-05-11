@@ -86,6 +86,10 @@ esclavo.
 
 ![Reinicio de /etc/init.d/mysql](img/15.png)
 
+Ahora se configura cada máquina por separado.
+
+### Configuración del maestro
+
 Una vez reiniciado, dentro del maestro, introducimos los siguientes comandos:
 
 + Creación de un usuario *esclavo*:
@@ -95,7 +99,7 @@ CREATE USER esclavo IDENTIFIED BY 'esclavo';
 
 + Dar permiso al esclavo de replicación:
 ~~~~sql
-GRANT REPLICATION SLAVE ON \*.\* TO 'esclavo'\@'%' IDENTIFIED BY 'esclavo';
+GRANT REPLICATION SLAVE ON *.* TO 'esclavo'@'%' IDENTIFIED BY 'esclavo';
 ~~~~
 
 + Eliminar privilegios y eliminar la posibilidad de escritura en tablas mientras
@@ -112,6 +116,42 @@ Una vez hecho esto, se comprueba el estado del maestro:
 ~~~~slq
 SHOW MASTER STATUS;
 ~~~~
+
+Con este último comando, aparece algo como lo siguiente, que nos muestra
+el nombre del fichero y la posición:
+
+![Show master status](img/20.png)
+
+Después de hacer la configuración en el maestro, haré la configuración en el 
+esclavo.
+
+### Configuración del esclavo
+
+Para configurar al esclavo hay que introducir un único comando que enlaza el
+esclavo con el maestro. La instrucción es:
+
+~~~~sql
+CHANGE MASTER TO MASTER_HOST='192.168.56.105', MASTER_USER='esclavo',
+MASTER_PASSWORD='esclavo', MASTER_LOG_FILE='mysql-bin.000012',
+MASTER_LOG_POS=154, MASTER_PORT=3306;
+~~~~
+
+Tras establecer el maestro, se inicia al esclavo y se muestra el estatus de éste
+para comprobar que todo ha ido correctamente y no ha habido fallos. Hay que fijarse
+en la variable *Seconds/_behind/_master*; si es distinta de *NULL*, la configuración
+es correcta. Como se puede comprobar en la captura, el valor es 0, es decir que
+la configuración está bien.
+
+![Show slave status](img/19.png)
+
+Una vez que se ha comprobado esto, se prueba a modificar el maestro; los cambios
+se deben ver reflejados en el esclavo. Para ello, se muestra primero el contenido
+original en el esclavo, se hace la inserción en el maestro y se vuelve a mostrar
+el contenido de la tabla en el esclavo.
+
+![Inserción](img/16.png)
+
+Como podemos comprobar, en efecto, la información se replica correctamente.
 
 
 
