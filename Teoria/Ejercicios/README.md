@@ -154,35 +154,53 @@ el paso abierto y cuáles no, se puede llevar a cabo redirección a través
 de esta herramienta... Es un comando muy potente y capaz de hacer maravillas con
 el firewall.
 
-# Tema 4
-
-## Ejercicio 2
-Buscar información sobre precio y características de balanceadores comerciales (hardware)
-específicos. Compara las prestaciones que ofrecen unos y otros.
-
-## Ejercicio 4
-Buscar información sobre los métodos de balanceo que implementan los dispositivos recogidos en
-el ejercicio 2 (o el software que hemos propuesto para la práctica 3).
-
-## Ejercicio 6
-Buscar información sobre los bloques de IP para los distintos países o continentes. Implementar
-en JavaScript o PHP la detección de la zona desde donde se conecta un usuario.
-
-## Ejercicio 7
-Buscar información sobre métodos y herramientas para implementar GSLB.
-
 # Tema 5
 
 ## Ejercicio 1
 Buscar información sobre cómo calcular el número de conexiones por segundo.
 
+Hay muchas formas de calcular el número de conexiones que hay abiertas en un servidor.
+Por ejemplo, podemos utilizar la herramienta *netstat* con el siguiente comando:
+
+```sh
+netstat | grep http | wc -l
+```
+
+Al ejecutar este comando, la salida será un número que corresponde al número de
+conexiones que hay en el puerto 80, es decir, el número de conexiones http que
+hay en el momento en el que se ejecuta. *wc -l* nos indica el número de líneas de
+la salida de *netstat* que hemos filtrado para que nos muestre solo las conexiones
+http.
+
+Otra forma es con el servicio que estemos usando; tanto *Apache* como *nginx* tienen
+la capacidad de mostrar las conexiones que tienen abiertas. Con *nginx* solo hay
+que cambiar el archivo de configuración para indicarle que muestre el número de
+conexiones (o que se redirija a un archivo para llevar la cuenta si queremos automatizar
+el proceso cada cierto tiempo). De manera similar, utilizando un módulo en *Apache*
+podemos conseguir el número de conexiones que hay activas.
+
 ## Ejercicio 2
 Instalar Wireshark y observar cómo fluye el tráfico de red en uno de los servidores web
 mientras se le hacen peticiones HTTP... o en la red de casa.
 
-## Ejercicio 3
-Buscar información sobre características, funcionalidad, disponibilidad para diversos SO, etc
-de herramientas para monitorizar las prestaciones de un servidor.
+En nuestro caso, utilizaremos el wireshark para analizar el tráfico cuando se
+hace una petición a google de acceso a youtube.
+
+![Wireshark](img/wireshark.png)
+
+Como podemos ver en la imagen, la traza marcada es la que inicia el comienzo de 
+la búsqueda de youtube. Para ello, el ordenador pide al DNS que resuelva la dirección
+IP del nombre de dominio *www.youtube.com*. El DNS responde con la IP del servidor
+y a partir de ese momento, comienza el intercambio de mensajes.
+
+Los primeros mensajes corresponden con el *handshake*, una serie de mensajes que
+se envian ambas partes para negociar cómo será la seguridad en los mensajes que se
+enviarán después. Es un paso muy importante ya que previene y dificulta que se
+produzcan ataques en la comunicación entre el servidor y el cliente.
+
+Tras este *handshake*, el cliente comienzará a hacer peticiones sobre contenido que
+desea y el servidor del youtube al que está conectado se encargará de enviar las
+respuestas a dichas peticiones.
 
 # Tema 6
 
