@@ -22,5 +22,10 @@ iptables para que la granja pueda defenderse en el caso de que sufra ataques.
 
 ## Práctica 5: Replicación de bases de datos MySQL
 
-Se construirá una réplica maestro-esclavo para lleva a cabo la clonación de la 
+Se construirá una réplica maestro-esclavo para lleva a cabo la clonación de la
 información de la máquina principal a la de backup.
+
+## Práctica 6: Servidor de disco NFS
+
+Se configurará un servidor NFS para exportar un espacio en disco a los servidores
+finales.
